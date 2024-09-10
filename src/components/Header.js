@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -19,6 +19,17 @@ const Header = () => {
   const auth = getAuth();
   const provider = new GoogleAuthProvider();
 
+  // useCallback to memoize setUser function
+  const setUser = useCallback((user) => {
+    dispatch(
+      setUserLoginDetails({
+        name: user.displayName,
+        email: user.email,
+        photo: user.photoURL,
+      })
+    );
+  }, [dispatch]);
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -27,7 +38,7 @@ const Header = () => {
       }
     });
     return () => unsubscribe(); // Cleanup subscription on component unmount
-  }, [auth, navigate]);
+  }, [auth, navigate, setUser]); // Add setUser to the dependency array
 
   const handleAuth = () => {
     if (!userName) {
@@ -46,16 +57,6 @@ const Header = () => {
         })
         .catch((err) => alert(err.message));
     }
-  };
-
-  const setUser = (user) => {
-    dispatch(
-      setUserLoginDetails({
-        name: user.displayName,
-        email: user.email,
-        photo: user.photoURL,
-      })
-    );
   };
 
   return (

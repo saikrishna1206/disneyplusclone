@@ -5,7 +5,6 @@ import Originals from "./Originals";
 import Recommends from "./Recommends";
 import Trending from "./Trending";
 import Viewers from "./Viewers";
-import Header from "./Header";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { db } from "../firebase"; 
@@ -17,8 +16,6 @@ import { selectUserName } from "../features/user/userSlice";
 const Home = () => {
   const dispatch = useDispatch();
   const userName = useSelector(selectUserName);
-
-
 
   useEffect(() => {
     const fetchMovies = async () => {
